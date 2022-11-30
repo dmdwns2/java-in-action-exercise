@@ -61,5 +61,46 @@ class StudentTest {
         Predicate<Integer> predicate = num -> num > 10;
         System.out.println(predicate.test(10));
     }
+
+    @Test
+    void optionalTest() {
+        // DB에서 select되어 값이 있는 상태
+        Optional<Teacher> optionalTeacher = Optional.of(new Teacher("김경록", true, true));
+        Optional<Teacher> emptyTeacher = Optional.empty();
+
+        List<Teacher> teachers = new ArrayList<>();
+        teachers.size(); // --> 값이 없으면 0
+
+
+        // 값이 없는 경우 get
+        Optional<Teacher> emptyTeacher2 = Optional.empty();
+        if(emptyTeacher2.isPresent()) {
+            emptyTeacher2.get();
+            emptyTeacher2.orElseThrow(RuntimeException::new);
+            Teacher teacher1 = emptyTeacher2.orElseThrow(()-> new RuntimeException());
+        }
+
+
+
+        // get
+        Optional<Teacher> optionalTeacher3 = Optional.of(new Teacher("김경록", true, true));
+        Teacher teacher = optionalTeacher3.get(); //값이 있는 경우
+
+
+
+        // 값이 있는 경우 무언가 처리 하고 싶을 때
+        Optional<Teacher> optionalTeacher4 = Optional.of(new Teacher("김경록", true, true));
+        optionalTeacher4.ifPresent(sth -> {
+            throw new RuntimeException(sth.getName());
+            // throw new HospitalReviewAppException(ErrorCode.DUPLICATED_USER_NAME, String.format("UserName:%s", request.getUserName()));
+        });
+
+        // .ofNullable, orElse()
+        Optional<Teacher> optionalTeacher5 = Optional.of(new Teacher(null, true, true));
+        String name = Optional.ofNullable(optionalTeacher5.get().getName()).orElse("이름이 없습니다.");
+        System.out.println(name);
+    }
+
+
 }
 

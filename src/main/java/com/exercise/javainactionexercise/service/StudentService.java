@@ -1,6 +1,6 @@
 package com.exercise.javainactionexercise.service;
 
-import com.lambda.labmdapractice.repository.StudentRepository;
+import com.exercise.javainactionexercise.repository.StudentRepository;
 import org.springframework.stereotype.Service;
 
 @Service
