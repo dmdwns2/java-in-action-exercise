@@ -1,0 +1,65 @@
+package com.exercise.javainactionexercise;
+
+import com.exercise.javainactionexercise.domain.Teacher;
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
+class StudentTest {
+
+    @Test
+    void name() {
+        List<Teacher> teachers = new ArrayList<>();
+        Teacher kyeongrok = new Teacher("김경록", true, true);
+        Teacher kyeonghwan = new Teacher("고경환", true, false);
+        Teacher sujin = new Teacher("김수진", false, true);
+        Teacher sohyun = new Teacher("강소현", true, true);
+
+        teachers.add(kyeongrok);
+        teachers.add(kyeonghwan);
+        teachers.add(sujin);
+        teachers.add(sohyun);
+
+        // 알고리즘 true이신 분들
+        System.out.println("---알고리즘 true이신 분들--");
+        // DB에서 읽어왔습니다.
+        List<Teacher> likeAlgorithmTeacher = new ArrayList<>();
+        for (int i = 0; i < teachers.size(); i++) {
+            if(teachers.get(i).isLikeAlgorithm()){
+                likeAlgorithmTeacher.add(teachers.get(i));
+            }
+        }
+
+        System.out.println("---SpringBoot이 true이신 분들 map--");
+        List<String> likeSpringBootTeachers = teachers.stream()
+                .filter(teacher -> teacher.isLikeSpringBoot() == true)
+                .map(teacher -> teacher.getName())
+                .collect(Collectors.toList());
+
+        for (String teacherName : likeSpringBootTeachers) {
+            System.out.println(teacherName);
+        }
+
+        Optional<Teacher> optionalTeacher = Optional.of(kyeongrok);
+        optionalTeacher.orElseThrow(()-> new RuntimeException());
+
+        List<String> likeSpringBootTeachers1 = teachers.stream()
+                .filter(item -> item.isLikeSpringBoot() == true)
+                .map(item -> item.getName())
+                .collect(Collectors.toList());
+
+
+    }
+
+    @Test
+    void predicateTest() {
+        // 숫자 num을 넣으면 10보다 큰지 true, false로 리턴 해주는 내장 인터페이스
+        Predicate<Integer> predicate = num -> num > 10;
+        System.out.println(predicate.test(10));
+    }
+}
+
