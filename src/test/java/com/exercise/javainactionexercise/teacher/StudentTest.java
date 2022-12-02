@@ -1,6 +1,6 @@
-package com.exercise.javainactionexercise;
+package com.exercise.javainactionexercise.teacher;
 
-import com.exercise.javainactionexercise.domain.Teacher;
+import com.exercise.javainactionexercise.teacher.domain.Teacher;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
