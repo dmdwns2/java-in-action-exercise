@@ -44,4 +44,17 @@ class UserControllerTest {
                 .andExpect(status().isOk());
     }
 
+    @Test
+    @DisplayName("회원가입 실패 userName 중복")
+    void join_fail() throws Exception {
+
+        String userName = "Mbappe";
+        String password = "123qwe";
+
+        mockMvc.perform(post("/api/v1/users/join")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsBytes(new UserJoinRequest(userName, password))))
+                .andDo(print())
+                .andExpect(status().isConflict());
+    }
 }
