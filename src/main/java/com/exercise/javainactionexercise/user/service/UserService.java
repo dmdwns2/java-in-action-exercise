@@ -1,6 +1,8 @@
 package com.exercise.javainactionexercise.user.service;
 
 import com.exercise.javainactionexercise.user.dto.User;
+import com.exercise.javainactionexercise.user.exception.AppException;
+import com.exercise.javainactionexercise.user.exception.ErrorCode;
 import com.exercise.javainactionexercise.user.respository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +20,7 @@ public class UserService {
         // username 중복체크 중복체크를 하려면 DB에 갔다와야 함
         userRepository.findByUserName(userName)
                 .ifPresent(user -> {
-                    throw new RuntimeException(userName + "는 이미 존재합니다.");
+                    throw new AppException(ErrorCode.USERNAME_DUPLICATED,userName + "는 이미 존재합니다.");
                 });
         //save 중복 아니면 저장
         User user = User.builder()
