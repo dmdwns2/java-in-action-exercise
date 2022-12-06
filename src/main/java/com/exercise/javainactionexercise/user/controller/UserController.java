@@ -1,6 +1,7 @@
 package com.exercise.javainactionexercise.user.controller;
 
 import com.exercise.javainactionexercise.user.dto.UserJoinRequest;
+import com.exercise.javainactionexercise.user.dto.UserLoginRequest;
 import com.exercise.javainactionexercise.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,5 +23,10 @@ public class UserController {
         return ResponseEntity.ok().body("회원가입이 성공했습니다.");
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody UserLoginRequest dto){
+        String token = userService.login(dto.getUserName(), dto.getPassword());
+        return ResponseEntity.ok().body(token);
+    }
 
 }

@@ -14,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithAnonymousUser;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -88,7 +89,7 @@ class UserControllerTest {
 
     @Test
     @DisplayName("로그인 실패 - userName 없음 ")
-    @WithAnonymousUser
+    @WithMockUser
     void login_fail1() throws Exception {
 
         String userName = "Mbappe";
@@ -108,7 +109,7 @@ class UserControllerTest {
 
     @Test
     @DisplayName("로그인 실패 - userName 틀림 ")
-    @WithAnonymousUser
+    @WithMockUser
     void login_fail2() throws Exception {
 
         String userName = "Mbappe";

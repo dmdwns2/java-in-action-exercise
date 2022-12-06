@@ -1,19 +1,22 @@
 package com.exercise.javainactionexercise.user.service;
 
+import com.exercise.javainactionexercise.user.config.EncoderConfig;
 import com.exercise.javainactionexercise.user.dto.User;
 import com.exercise.javainactionexercise.user.exception.AppException;
 import com.exercise.javainactionexercise.user.exception.ErrorCode;
 import com.exercise.javainactionexercise.user.respository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
 
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public String join(String userName, String password) {
 
@@ -25,7 +28,7 @@ public class UserService {
         //save 중복 아니면 저장
         User user = User.builder()
                 .userName(userName)
-                .password(password)
+                .password(bCryptPasswordEncoder.encode(password))
                 .build();
         userRepository.save(user);
 
@@ -34,6 +37,17 @@ public class UserService {
     }
 
     public String login(String userName, String password) {
-        return null;
+
+        // name 없음
+        User selectedUser = userRepository.findByUserName(userName)
+                .orElseThrow(() -> new AppException(ErrorCode.USERNAME_NOT_FOUND, userName + "이(가) 없습니다."));
+
+
+        // password 틀림
+        if(!bCryptPasswordEncoder.matches(selectedUser.getPassword(), password)) {
+            throw new AppException(ErrorCode.INVALID_PASSWORD,"패스워드를 잘못 입력 했습니다.");
+        }
+
+        return "token 리턴";
     }
 }
