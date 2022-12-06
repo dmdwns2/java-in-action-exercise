@@ -1,6 +1,7 @@
 package com.exercise.javainactionexercise.user.controller;
 
 import com.exercise.javainactionexercise.user.dto.UserJoinRequest;
+import com.exercise.javainactionexercise.user.dto.UserLoginRequest;
 import com.exercise.javainactionexercise.user.exception.AppException;
 import com.exercise.javainactionexercise.user.exception.ErrorCode;
 import com.exercise.javainactionexercise.user.service.UserService;
@@ -44,8 +45,9 @@ class UserControllerTest {
         String password = "123qwe";
 
         mockMvc.perform(post("/api/v1/users/join")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsBytes(new UserJoinRequest(userName, password))))
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsBytes(new UserJoinRequest(userName, password))))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
@@ -62,6 +64,7 @@ class UserControllerTest {
 
 
         mockMvc.perform(post("/api/v1/users/join")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(new UserJoinRequest(userName, password))))
                 .andDo(print())
@@ -76,13 +79,13 @@ class UserControllerTest {
         String userName = "Mbappe";
         String password = "123qwe";
 
-        when(userService.login(any(),any()))
+        when(userService.login(any(), any()))
                 .thenReturn("token");
 
         mockMvc.perform(post("/api/v1/users/login")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(new UserJoinRequest(userName, password))))
+                        .content(objectMapper.writeValueAsBytes(new UserLoginRequest(userName, password))))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
@@ -95,14 +98,14 @@ class UserControllerTest {
         String userName = "Mbappe";
         String password = "123qwe";
 
-        when(userService.login(any(),any()))
-                .thenReturn(new AppException(ErrorCode.USERNAME_DUPLICATED, "") {
+        when(userService.login(any(), any()))
+                .thenThrow(new AppException(ErrorCode.USERNAME_NOT_FOUND, "") {
                 });
 
         mockMvc.perform(post("/api/v1/users/login")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(new UserJoinRequest(userName, password))))
+                        .content(objectMapper.writeValueAsBytes(new UserLoginRequest(userName, password))))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
@@ -115,14 +118,14 @@ class UserControllerTest {
         String userName = "Mbappe";
         String password = "123qwe";
 
-        when(userService.login(any(),any()))
-                .thenReturn(new AppException(ErrorCode.USERNAME_DUPLICATED, "") {
+        when(userService.login(any(), any()))
+                .thenThrow(new AppException(ErrorCode.USERNAME_DUPLICATED, "") {
                 });
 
         mockMvc.perform(post("/api/v1/users/login")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(new UserJoinRequest(userName, password))))
+                        .content(objectMapper.writeValueAsBytes(new UserLoginRequest(userName, password))))
                 .andDo(print())
                 .andExpect(status().isConflict());
     }
